@@ -8,27 +8,19 @@ const transform = new SimpleTransform();
 transform.subscribe([["_input", PolicyInjection.Stored]]);
 /* The strategy the transform engine will use when handling errors */
 transform.errorHandler(PolicyError.SkipOnFailure);
-/* Auxiliar transform function for records */
-const uppercase = (record) => {
-    const newRecord = {
-        ...record,
-        value: record.value.map((char) => {
-            if (char >= 97 && char <= 122) {
-                return char - 32;
-            } else {
-                return char;
-            }
-        }),
-    };
-    return newRecord;
-}
 /* Transform function */
 transform.processRecord((recordBatch) => {
     const result = new Map();
     const transformedRecord = recordBatch.map(({ header, records }) => {
+        res = new Array(Record);
+        records.forEach(element => {
+            if (element.valSize < 1000) {
+                res.push(element)
+            }
+        })
         return {
             header,
-            records: records.map(uppercase),
+            records: res,
         };
     });
     result.set("output", transformedRecord);
